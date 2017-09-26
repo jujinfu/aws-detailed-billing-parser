@@ -165,6 +165,7 @@ def parse(config, verbose=False):
     if config.output_to_file:
         echo('Opening output file: {}'.format(config.output_filename))
         file_out = open(config.output_filename, 'w')
+        file_out.write('[')
 
     elif config.output_to_elasticsearch:
         echo('Sending DBR to Elasticsearch host: {}:{}'.format(config.es_host, config.es_port))
@@ -281,7 +282,7 @@ def parse(config, verbose=False):
                     if config.output_to_file:
                         file_out.write(
                             json.dumps(utils.pre_process(json_row), ensure_ascii=False))
-                        file_out.write('\n')
+                        file_out.write(',\n')
                         added += 1
 
                     elif config.output_to_elasticsearch:
@@ -339,6 +340,7 @@ def parse(config, verbose=False):
     file_in.close()
 
     if config.output_to_file:
+        file_out.write('{}]')
         file_out.close()
 
     echo('Finished processing!')
